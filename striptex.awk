@@ -4,7 +4,7 @@
 {lines[NR]=$0; linecount++}
 END {
   print_blank=1
-	for (i=1; i<linecount; i++){
+	for (i=1; i<=linecount; i++){
     if ((lines[i] ~ /\\begin\{document\}/) || (lines[i] ~ /\\end\{equation(.)*\}/) ) print_blank=0
     if ((lines[i] ~ /\\begin\{equation(.)*\}/) ) print_blank=1
 		if (print_blank == 1){
@@ -17,7 +17,8 @@ END {
 	  	gsub(/\\[a-z]+(\*)*\{/,"",lines[i])  #\begin{} -> }
 	  	gsub(/^( )*\\[a-z]+$/," ",lines[i])  #\newline -> " "
 	  	gsub(/\\[a-z]\\\\/," ",lines[i]) #\smallskip\\ -> " "
-	  	gsub(/[\{\}\~]/," ",lines[i])          #} -> " "
+	  	gsub(/[\{\}\~(\-\-\-)]/," ",lines[i])          #} -> " "
+	    gsub(/(\-\-\-)/," - ",lines[i])          #} -> " "
 	  	gsub(/[_\$\\]/, "", lines[i])
 	  	gsub(/^( )*/, "", lines[i])
 	  	gsub(/( )+\./, ".", lines[i])
